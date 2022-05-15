@@ -25,6 +25,7 @@ int InitPassengers(ePassenger* list, int len)
 void Menu(ePassenger* list, int id, char name[], char lastName[], char flycode[], int typePassenger, float price, int statusFly, int len)
 {
 	int menu;
+	int idAux;
 	id = 1000;
 
 		do
@@ -75,7 +76,8 @@ void Menu(ePassenger* list, int id, char name[], char lastName[], char flycode[]
 					if(searchEmpty(list, PASSENGER, BUSY) != -1)
 					{
 						printPassenger(list, PASSENGER);
-						modifyPassenger(list, id, name, lastName, flycode, typePassenger, price, statusFly, PASSENGER);
+						pedirEntero(&idAux, "Ingrese el ID del pasajero a modificar (1000-2999): ", "Reingrese el ID del producto a modificar (1000-2199): ", 1000, 2999);
+						modifyPassenger(list, idAux, name, lastName, flycode, typePassenger, price, statusFly, PASSENGER);
 					}
 					else
 					{
@@ -86,7 +88,8 @@ void Menu(ePassenger* list, int id, char name[], char lastName[], char flycode[]
 					if(searchEmpty(list, PASSENGER, BUSY) != -1)
 					{
 						printPassenger(list, PASSENGER);
-						removePassenger(list, PASSENGER, id);
+						pedirEntero(&idAux, "Ingrese el ID del pasajero a borrar (1000-2999): ", "Reingrese el ID del pasajero a borrar (1000-2999): ", 1000, 2999);
+						removePassenger(list, PASSENGER, idAux);
 					}
 					else
 					{
@@ -163,17 +166,15 @@ int removePassenger(ePassenger* list, int len, int id)
 {
 	int retorno = -1;
 	int index;
-	int i = 0;
 
 	index = findPassengerById(list, PASSENGER, id);
-	pedirEntero(&id, "Ingrese el ID del pasajero a borrar (1000-2999): ", "Reingrese el ID del pasajero a borrar (1000-2999): ", 1000, 2999);
 
-	if(index == -1)
+	if(index != -1)
 	{
 		if(productoVerificarConfirmacion("\nIngrese 's' para confirmar la baja del pasajero: ") == 0)
 		{
-			list[i].isEmpty = EMPTY;
-			printf("\nPasajero %d dado de baja correctamente!\n\n", list[i].id);
+			list[index].isEmpty = EMPTY;
+			printf("\nPasajero %d dado de baja correctamente!\n\n", list[index].id);
 		}
 		else
 		{
@@ -195,9 +196,7 @@ int modifyPassenger(ePassenger* list, int id, char name[], char lastName[], char
 	int retorno = -1;
 	int index;
 	int opcion;
-	int i = 0;
 
-	pedirEntero(&id, "Ingrese el ID del pasajero a modificar (1000-2999): ", "Reingrese el ID del producto a modificar (1000-2199): ", 1000, 2999);
 	index = findPassengerById(list, PASSENGER, id);
 
 	if(index != -1)
@@ -234,14 +233,13 @@ int modifyPassenger(ePassenger* list, int id, char name[], char lastName[], char
 				case 1:
 					printf("\nPasajero a modificar:\n\n%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio", "Estado De Vuelo");
 					productoMostrarUno(list[index]);
-					pedirCadena(list[i].name, "Ingrese el nombre del pasajero: ", "ERROR- Ingrese el nombre del pasajero: ", 51);
+					pedirCadena(list[index].name, "Ingrese el nombre del pasajero: ", "ERROR- Ingrese el nombre del pasajero: ", 51);
 					printf("\nPasajero luego de la modificación:\n\n%-10s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio");
 					productoMostrarUno(list[index]);
 
 					if(!productoVerificarConfirmacion("\nIngrese 's' para confirmar la modificacion del pasajero: "))
 					{
-						list[i].id = list[index].id;
-						printf("\nPasajero %d modificado correctamente!\n\n", list[i].id);
+						printf("\nPasajero %d modificado correctamente!\n\n", list[index].id);
 						retorno = 0;
 					}
 					else
@@ -254,14 +252,13 @@ int modifyPassenger(ePassenger* list, int id, char name[], char lastName[], char
 				case 2:
 					printf("\nPasajero a modificar:\n\n%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio", "Estado De Vuelo");
 					productoMostrarUno(list[index]);
-					pedirCadena(list[i].lastName, "Ingrese el apellido del pasajero: ", "ERROR- Ingrese el apellido del pasajero: ", 51);
+					pedirCadena(list[index].lastName, "Ingrese el apellido del pasajero: ", "ERROR- Ingrese el apellido del pasajero: ", 51);
 					printf("\nPasajero luego de la modificación:\n\n%-10s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio");
 					productoMostrarUno(list[index]);
 
 					if(!productoVerificarConfirmacion("\nIngrese 's' para confirmar la modificacion del pasajero: "))
 					{
-						list[i].id = list[index].id;
-						printf("\nPasajero %d modificado correctamente!\n\n", list[i].id);
+						printf("\nPasajero %d modificado correctamente!\n\n", list[index].id);
 						retorno = 0;
 					}
 					else
@@ -274,14 +271,13 @@ int modifyPassenger(ePassenger* list, int id, char name[], char lastName[], char
 				case 3:
 					printf("\nPasajero a modificar:\n\n%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio", "Estado De Vuelo");
 					productoMostrarUno(list[index]);
-					pedirString(list[i].flyCode, "Ingrese el codigo de vuelo: ", "ERROR- Ingrese el codigo de vuelo valido: ", 51);
+					pedirString(list[index].flyCode, "Ingrese el codigo de vuelo: ", "ERROR- Ingrese el codigo de vuelo valido: ", 51);
 					printf("\nPasajero luego de la modificación:\n\n%-10s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio");
 					productoMostrarUno(list[index]);
 
 					if(!productoVerificarConfirmacion("\nIngrese 's' para confirmar la modificacion del pasajero: "))
 					{
-						list[i].id = list[index].id;
-						printf("\nPasajero %d modificado correctamente!\n\n", list[i].id);
+						printf("\nPasajero %d modificado correctamente!\n\n", list[index].id);
 						retorno = 0;
 					}
 					else
@@ -294,14 +290,13 @@ int modifyPassenger(ePassenger* list, int id, char name[], char lastName[], char
 				case 4:
 					printf("\nPasajero a modificar:\n\n%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio", "Estado De Vuelo");
 					productoMostrarUno(list[index]);
-					pedirEntero(&list[i].typePassenger, "Ingrese el tipo de pasajero (PRIMERA CLASE = 1, CLASE TURISTA = 2, CLASE ECONOMICA = 3): ", "ERROR- Ingrese un tipo de pasajero valido (PRIMERA CLASE = 1, CLASE TURISTA = 2, CLASE ECONOMICA = 3): ", 1, 3);
+					pedirEntero(&list[index].typePassenger, "Ingrese el tipo de pasajero (PRIMERA CLASE = 1, CLASE TURISTA = 2, CLASE ECONOMICA = 3): ", "ERROR- Ingrese un tipo de pasajero valido (PRIMERA CLASE = 1, CLASE TURISTA = 2, CLASE ECONOMICA = 3): ", 1, 3);
 					printf("\nPasajero luego de la modificación:\n\n%-10s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio");
 					productoMostrarUno(list[index]);
 
 					if(!productoVerificarConfirmacion("\nIngrese 's' para confirmar la modificacion del pasajero: "))
 					{
-						list[i].id = list[index].id;
-						printf("\nPasajero %d modificado correctamente!\n\n", list[i].id);
+						printf("\nPasajero %d modificado correctamente!\n\n", list[index].id);
 						retorno = 0;
 					}
 					else
@@ -314,14 +309,13 @@ int modifyPassenger(ePassenger* list, int id, char name[], char lastName[], char
 				case 5:
 					printf("\nPasajero a modificar:\n\n%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio", "Estado De Vuelo");
 					productoMostrarUno(list[index]);
-					pedirFlotante(&list[i].price, "Ingrese el precio (entre 1 y 1000000): ", "ERROR- Ingrese un precio valido (entre 1 y 1000000): ", 1, 1000000);
+					pedirFlotante(&list[index].price, "Ingrese el precio (entre 1 y 1000000): ", "ERROR- Ingrese un precio valido (entre 1 y 1000000): ", 1, 1000000);
 					printf("\nPasajero luego de la modificación:\n\n%-10s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio");
 					productoMostrarUno(list[index]);
 
 					if(!productoVerificarConfirmacion("\nIngrese 's' para confirmar la modificacion del pasajero: "))
 					{
-						list[i].id = list[index].id;
-						printf("\nPasajero %d modificado correctamente!\n\n", list[i].id);
+						printf("\nPasajero %d modificado correctamente!\n\n", list[index].id);
 						retorno = 0;
 					}
 					else
@@ -334,14 +328,13 @@ int modifyPassenger(ePassenger* list, int id, char name[], char lastName[], char
 				case 6:
 					printf("\nPasajero a modificar:\n\n%-10s %-20s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio", "Estado De Vuelo");
 					productoMostrarUno(list[index]);
-					pedirEntero(&list[i].statusFly, "Ingrese el estado de vuelo (EN TIEMPO = 1, CANCELADO = 2, REPROGRAMADO = 3)", "ERROR- Ingrese el estado de vuelo valido, (EN TIEMPO = 1, CANCELADO = 2, REPROGRAMADO = 3)", 1, 3);
+					pedirEntero(&list[index].statusFly, "Ingrese el estado de vuelo (EN TIEMPO = 1, CANCELADO = 2, REPROGRAMADO = 3)", "ERROR- Ingrese el estado de vuelo valido, (EN TIEMPO = 1, CANCELADO = 2, REPROGRAMADO = 3)", 1, 3);
 					printf("\nPasajero luego de la modificación:\n\n%-10s %-20s %-20s %-20s %-20s %-20s\n", "ID", "Nombre", "Apellido", "Codigo De Vuelo", "Tipo De Pasajero", "Precio");
 					productoMostrarUno(list[index]);
 
 					if(!productoVerificarConfirmacion("\nIngrese 's' para confirmar la modificacion del pasajero: "))
 					{
-						list[i].id = list[index].id;
-						printf("\nPasajero %d modificado correctamente!\n\n", list[i].id);
+						printf("\nPasajero %d modificado correctamente!\n\n", list[index].id);
 						retorno = 0;
 					}
 					else
